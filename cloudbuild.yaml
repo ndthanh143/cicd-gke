@@ -32,19 +32,17 @@ steps:
       - push
       - ${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_IMAGE_NAME}:${_IMAGE_TAG}
 
-  # - id: update-new-image
-  #   name: bash
-  #   entrypoint: bash
-  #   args:
-  #     - -c
-  #     - |
-  #       IMAGE_URI="${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_IMAGE_NAME}:${_IMAGE_TAG}"
-  #       sed -i.bak "s|IMAGE_PLACEHOLDER|${IMAGE_URI}|g" "repo/${_DEPLOYMENT_FILE}"
-  #       rm -f "repo/${_DEPLOYMENT_FILE}.bak"
-  #       cat "repo/${_DEPLOYMENT_FILE}"
-
-options:
-  logging: CLOUD_LOGGING_ONLY
+  - id: deploy-to-gke
+    name: gcr.io/cloud-builders/kubectl
+    args:
+      - set
+      - image
+      - deployment/cicd-app-1
+      - runimage-sha256-1=gcr.io/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_IMAGE_NAME}:${_IMAGE_TAG}
+    env:
+      - 'CLOUDSDK_COMPUTE_REGION=us-central1'
+      - 'CLOUDSDK_COMPUTE_ZONE=asia-southeast1-b'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=cicd-cluster'
 
 images:
   - ${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_IMAGE_NAME}:${_IMAGE_TAG}
