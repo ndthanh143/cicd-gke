@@ -40,7 +40,6 @@ steps:
       - deployment/cicd-app-1
       - runimage-sha256-1=gcr.io/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_IMAGE_NAME}:${_IMAGE_TAG}
     env:
-      - 'CLOUDSDK_COMPUTE_REGION=us-central1'
       - 'CLOUDSDK_COMPUTE_ZONE=asia-southeast1-b'
       - 'CLOUDSDK_CONTAINER_CLUSTER=cicd-cluster'
 options:
