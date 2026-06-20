@@ -32,13 +32,14 @@ steps:
       - push
       - ${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_IMAGE_NAME}:${_IMAGE_TAG}
 
+#us-central1-docker.pkg.dev/static-scholar-499213-k5/gke-image-repo/gke-image@sha256:29729501faa286619a18f27048ce75b5e13c311ac606917ff238a795e818e9b7
   - id: deploy-to-gke
     name: gcr.io/cloud-builders/kubectl
     args:
       - set
       - image
       - deployment/cicd-app-1
-      - nginx-1=gcr.io/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_IMAGE_NAME}:${_IMAGE_TAG}
+      - nginx-1=${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_IMAGE_NAME}:${_IMAGE_TAG}
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=asia-southeast1-b'
       - 'CLOUDSDK_CONTAINER_CLUSTER=cicd-cluster'
