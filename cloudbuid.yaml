@@ -42,9 +42,10 @@ steps:
         sed -i.bak "s|IMAGE_PLACEHOLDER|${IMAGE_URI}|g" "repo/${_DEPLOYMENT_FILE}"
         rm -f "repo/${_DEPLOYMENT_FILE}.bak"
         cat "repo/${_DEPLOYMENT_FILE}"
+
 options:
   logging: CLOUD_LOGGING_ONLY
-  
+
 images:
   - ${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_IMAGE_NAME}:${_IMAGE_TAG}
 
