@@ -1,0 +1,47 @@
+substitutions:
+  _REPO_URL: https://github.com/ndthanh143/cicd-gke.git
+  _IMAGE_NAME: gke-image
+  _AR_HOSTNAME: us-central1-docker.pkg.dev
+  _AR_PROJECT_ID: static-scholar-499213-k5
+  _AR_REPOSITORY: gke-image-repo
+  _IMAGE_TAG: V1.0
+  _DEPLOYMENT_FILE: k8s/deployment.yaml
+
+steps:
+  - id: clone-repo
+    name: gcr.io/cloud-builders/git
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        rm -rf repo
+        git clone "${_REPO_URL}" repo
+
+  - id: build-image
+    name: gcr.io/cloud-builders/docker
+    dir: repo
+    args:
+      - build
+      - -t
+      - ${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_IMAGE_NAME}:${_IMAGE_TAG}
+      - .
+
+  - id: push-image
+    name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - ${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_IMAGE_NAME}:${_IMAGE_TAG}
+
+  - id: update-new-image
+    name: bash
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        IMAGE_URI="${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_IMAGE_NAME}:${_IMAGE_TAG}"
+        sed -i.bak "s|IMAGE_PLACEHOLDER|${IMAGE_URI}|g" "repo/${_DEPLOYMENT_FILE}"
+        rm -f "repo/${_DEPLOYMENT_FILE}.bak"
+        cat "repo/${_DEPLOYMENT_FILE}"
+
+images:
+  - ${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_IMAGE_NAME}:${_IMAGE_TAG}
