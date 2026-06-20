@@ -4,7 +4,7 @@ substitutions:
   _AR_HOSTNAME: us-central1-docker.pkg.dev
   _AR_PROJECT_ID: static-scholar-499213-k5
   _AR_REPOSITORY: gke-image-repo
-  _IMAGE_TAG: V1.0
+  _IMAGE_TAG: V2.0
   _DEPLOYMENT_FILE: k8s/deployment.yaml
 
 steps:
